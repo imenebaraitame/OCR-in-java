@@ -8,6 +8,10 @@ To create a simple ocr software, download the tesseract
 library and install it from
 [github](https://github.com/UB-Mannheim/tesseract/wiki).
 
+You'll then need to install tesseract in a local directory, default path:
+```
+.\Tesseract-OCR\tessdata
+```
 Then lets create a new maven project and add in pom.xml 
 two dependecies. The first for tesseract library, and the 
 seconde for creating a pdf document using iText.
@@ -35,7 +39,7 @@ The source code is written in 6 classes:
     |
     - java
      |
-     - orc
+     - ocr
       |     
       - Main.java
       - Image.java
