@@ -28,13 +28,27 @@ seconde for creating a pdf document using iText.
 ```
 ## _About the code_
 The source code is written in 6 classes:
+```
+  - src
+   |
+   - main
+    |
+    - java
+     |
+     - orc
+      |     
+      - Main.java
+      - Image.java
+      - Process.java
+      - Fentre.java
+      - Imgtext.java
+      - TextPdf.java
+    - resources
+     |
+     - images
+      - ...
+```
 
-  - Main.java
-  - Image.java
-  - Process.java
-  - Fentre.java
-  - Imgtext.java
-  - TextPdf.java
 #
 The code is relatively simple, we first open picture in which we are interested in. and we use some digital image processing (binarization: means to convert a colored image into a black and white) to improve the text recognition efficiency
  of the tesseract library.
