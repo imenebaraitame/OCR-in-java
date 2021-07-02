@@ -23,16 +23,16 @@ public class Fenetre extends JFrame {
         this.setLocationRelativeTo(null);
      // End the process when you click on the red cross
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       
+
       //Instantiation of JPanel object
         JLabel picLabel = new JLabel(new ImageIcon(image));
         JPanel pan = new JPanel();
-       
+
         pan.add(picLabel);
         //We warn our JFrame that our JPanel will be its content pane
         this.setContentPane(pan);
         this.setVisible(true);
 
 }
-	 
+
 }
