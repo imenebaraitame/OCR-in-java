@@ -60,10 +60,10 @@ The code is relatively simple, we first open picture in which we are interested 
 Then in order to show the new image in a window we are going to use JFrame and Jpanel objects in the package javax.swing.
 The result should be like this:
 
-![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/bufferedImage.jpg)
+![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/bufferedImage.jpg)
 
 Comparing to the original image:
-![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/test2.jpg)
+![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/test2.jpg)
 we can see that our original image with colored background converted into a binary image.
 
 #
@@ -74,7 +74,7 @@ we can see that our original image with colored background converted into a bina
  The last thing left is adding this text to Pdf document created from scratch based on iText.
  Below you will find a screenshot of the final result of the code:
 
- ![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/ocrDemo.png)
+ ![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/ocrDemo.png)
 
 
  
