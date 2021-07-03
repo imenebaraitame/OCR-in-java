@@ -1,6 +1,7 @@
 package ocr;
 
 import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 
 import com.itextpdf.text.BaseColor;
@@ -14,16 +15,18 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class TextPdf {
 	String fulltext;
-	String path3;
-        public TextPdf(String fulltext, String path3) {
+	String docPath;
+        public TextPdf(String fulltext, String docPath) {
 	          this.fulltext = fulltext;
-	          this.path3 = path3;
+	          this.docPath = docPath;
 	        }
 
 	    void document() throws FileNotFoundException, DocumentException {
 	    	Document document = new Document(PageSize.LETTER);
 	    	//2)Get a PdfWriter instance
-	    	PdfWriter.getInstance(document, new FileOutputStream(path3));
+	    	FileOutputStream fos = new FileOutputStream(docPath);
+	    	System.out.println("File will be created at: " + new File(docPath).getPath());
+	    	PdfWriter.getInstance(document, fos);
 	    	//3)Open the Document
 	    	document.open();
 	    	//4)Add content
