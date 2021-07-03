@@ -8,16 +8,18 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		// if image was not in current directory copy the path of the image
-		String imagePath = Main.class.getResource("/images/test2.jpg").getPath();
-		Process image = new Process(imagePath, ImageIO.read(new File(imagePath)) );
-	    BufferedImage img = image.bufferedImage();
-	    Fenetre fen = new Fenetre(img);
+		//String imagePath = Main.class.getResource("/images/test2.jpg").getPath();
+		//Process image = new Process(imagePath, ImageIO.read(new File(imagePath)) );
+	    //BufferedImage img = image.bufferedImage();
+	    //Fenetre fen = new Fenetre(img);
 
 
 		Imgtext ocr = new Imgtext(Main.class.getResource("/images/bufferedImage.jpg").getPath());
 		String fulltext = ocr.text();
+		System.out.println("Creating pdf document...");
 
-		TextPdf pdf = new TextPdf(fulltext, "ocrDemo.pdf");
+		TextPdf pdf = new TextPdf(fulltext, "./ocrDemo.pdf");
+		System.out.println("Document created.");		
 		pdf.document();
 
 	}
