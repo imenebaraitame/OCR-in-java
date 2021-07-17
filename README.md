@@ -4,17 +4,18 @@
 Simple OCR project created with Java to read text from image.
 
 ## _Installation_
-To create a simple ocr software, download the tesseract
-library and install it from
-[github](https://github.com/UB-Mannheim/tesseract/wiki).
-
+To create a simple ocr software, download the tesseract library and install it from [github](https://github.com/UB-Mannheim/tesseract/wiki).
 You'll then need to install tesseract in a local directory, default path:
 ```
 .\Tesseract-OCR\tessdata
 ```
-Then lets create a new maven project and add in pom.xml 
-two dependecies. The first for tesseract library, and the 
-seconde for creating a pdf document using iText.
+and then install [image magick](https://imagemagick.org/) to make some adjustments to the image, and help tesseract to improve text recognition.
+The default path:
+```
+.\ImageMagick-7.1.0-Q16-HDRI
+```
+So lets beging by creating a new maven project and add in pom.xml three dependecies. The first for tesseract library, and the 
+seconde for creating a pdf document using iText and the last one is for image magick library.
 
 ```bash 
  <dependency>
@@ -30,6 +31,13 @@ seconde for creating a pdf document using iText.
     <version>5.5.13.2 </version>
  </dependency>
 ```
+```bash 
+ <dependency>
+       <groupId>org.im4java</groupId>
+       <artifactId>im4java</artifactId>
+       <version>1.4.0</version>
+ </dependency> 
+```
 ## _About the code_
 The source code is written in 6 classes:
 ```
@@ -42,11 +50,11 @@ The source code is written in 6 classes:
      - ocr
       |     
       - Main.java
-      - Image.java
-      - Process.java
-      - Fentre.java
+      - ImgProcess.java
       - Imgtext.java
       - TextPdf.java
+      - getTesseractCmd.java
+      - MyRunnable.java
     - resources
      |
      - images
@@ -54,27 +62,18 @@ The source code is written in 6 classes:
 ```
 
 #
-The code is relatively simple, we first open picture in which we are interested in. and we use some digital image processing (binarization: means to convert a colored image into a black and white) to improve the text recognition efficiency
- of the tesseract library.
- 
-Then in order to show the new image in a window we are going to use JFrame and Jpanel objects in the package javax.swing.
-The result should be like this:
-
-![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/bufferedImage.jpg)
-
-Comparing to the original image:
-![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/test2.jpg)
-we can see that our original image with colored background converted into a binary image.
-
+The code is relatively simple, we first open picture in which we are interested in. and we use some digital image processing:
+ -Increase contrast and removing black border around the image that may have during scanning.
+ -Deskew: (rotation of the image) This means deskewing the image, to bring it in the right format and right shape..
+ -Binarize image: means to convert a colored image into a black and white.
 #
- After that we jump to Imgtext.java class, we are creating 
- a new instance of tesseract. we indicate where we have installed
+ After that we jump to Imgtext.java class, we are creating a new instance of tesseract. we indicate where we have installed
  the library and then we do a text recognition using the doOCR() method.
 #
- The last thing left is adding this text to Pdf document created from scratch based on iText.
- Below you will find a screenshot of the final result of the code:
+ And then add this text to Pdf document created from scratch based on iText.
 
- ![App Screenshot](https://raw.githubusercontent.com/imenebaraitame/OCR-in-java/master/src/main/resources/images/ocrDemo.png)
+#
+The last thing left is creating a searchable pdf with invisible text layer place on the top of the image.
 
 
  
