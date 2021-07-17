@@ -1,27 +1,31 @@
 package ocr;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		// if image was not in current directory copy the path of the image
-		//String imagePath = Main.class.getResource("/images/test2.jpg").getPath();
-		//Process image = new Process(imagePath, ImageIO.read(new File(imagePath)) );
-	    //BufferedImage img = image.bufferedImage();
-	    //Fenetre fen = new Fenetre(img);
+		//Image processing.
+		String imagePath = Main.class.getResource("/images/skew.jpg").getPath();
+		ImgProcess image = new ImgProcess(imagePath );
+		String imageDeskew = image.deskewImage(imagePath);
+		String imageMagick = image.magickManipulation(imageDeskew);
+	    String finalImage = image.bufferedImage(imageMagick);
+	   
 
-
-		Imgtext ocr = new Imgtext(Main.class.getResource("/images/bufferedImage.jpg").getPath());
+        //Extract text from the image.
+		Imgtext ocr = new Imgtext(finalImage);
 		String fulltext = ocr.text();
+		
+		
 		System.out.println("Creating pdf document...");
-
-		TextPdf pdf = new TextPdf(fulltext, "./ocrDemo.pdf");
+		TextPdf textpdf = new TextPdf(fulltext, "./ocrDemo.pdf");
 		System.out.println("Document created.");		
-		pdf.document();
-
+		textpdf.document();
+		
+		//Place an invisible text layer on the top of the image and create a searchable pdf.
+		getTesseractCmd cmd = new getTesseractCmd(finalImage, "./textonly_pdf", "Tesseract", "pdf");
+		cmd.searchableImg();
+		
+  
 	}
 
 }
