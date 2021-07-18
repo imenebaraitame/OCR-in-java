@@ -8,10 +8,10 @@ public class Main {
 		ImgProcess image = new ImgProcess(imagePath );
 		String imageDeskew = image.deskewImage(imagePath);
 		String imageMagick = image.magickManipulation(imageDeskew);
-	    String finalImage = image.bufferedImage(imageMagick);
+	    	String finalImage = image.bufferedImage(imageMagick);
 	   
 
-        //Extract text from the image.
+        	//Extract text from the image.
 		Imgtext ocr = new Imgtext(finalImage);
 		String fulltext = ocr.text();
 		
@@ -22,7 +22,7 @@ public class Main {
 		textpdf.document();
 		
 		//Place an invisible text layer on the top of the image and create a searchable pdf.
-		getTesseractCmd cmd = new getTesseractCmd(finalImage, "./textonly_pdf", "Tesseract", "pdf");
+		TesseractCmd cmd = new TesseractCmd(finalImage, "./textonly_pdf", "tesseract", "pdf");
 		cmd.searchableImg();
 		
   

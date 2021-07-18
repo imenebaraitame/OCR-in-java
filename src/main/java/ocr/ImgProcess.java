@@ -17,8 +17,24 @@ import com.recognition.software.jdeskew.ImageDeskew;
 import net.sourceforge.tess4j.util.ImageHelper;
 
 public class ImgProcess {
-	String imagePath1;
-	ImgProcess(String imagePath1) {
+
+	public static final String IMAGE_MAGICK_PATH;
+	static {
+		if (Utils.isLinux()){
+			IMAGE_MAGICK_PATH = "D:\\ImageMagick-7.1.0-Q16-HDRI";
+		} else {
+			IMAGE_MAGICK_PATH = "/usr/bin/";
+		}	
+	}
+	
+	// Windows
+	//public static final String IMAGE_MAGICK_PATH = "D:\\ImageMagick-7.1.0-Q16-HDRI";
+	// Linux
+	//public static final String IMAGE_MAGICK_PATH = "/usr/bin/";
+
+	private String imagePath1;
+	
+	public ImgProcess(String imagePath1) {
 		this.imagePath1 = imagePath1;
 		
 	}
@@ -46,7 +62,7 @@ public class ImgProcess {
 //                           get rid of a black border around the image.
   
 	public String magickManipulation(String deskew) throws IOException, InterruptedException, IM4JavaException {
-          ProcessStarter.setGlobalSearchPath("D:\\ImageMagick-7.1.0-Q16-HDRI");
+          ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
 	      // create the operation, add images and operators/options
 	      IMOperation op = new IMOperation();
 	      op.addImage();
