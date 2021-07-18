@@ -3,10 +3,10 @@ package ocr;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class getTesseractCmd {
+public class TesseractCmd {
 	String input_file; String output_file; String tesseract_install_path ;String configfile;
 	
-	getTesseractCmd(String input_file, String output_file, String tesseract_install_path ,String configfile){
+	public TesseractCmd(String input_file, String output_file, String tesseract_install_path ,String configfile){
 		this.input_file = input_file;
 		this.output_file = output_file;
 		this.tesseract_install_path = tesseract_install_path;
@@ -15,7 +15,7 @@ public class getTesseractCmd {
 		
 	public void searchableImg() throws IOException {
 		
-      String[] command ={ "cmd" , };
+      		String[] command ={ (Utils.isWindows()?"cmd":"bash") , };
 		 
 		 try {
 		 // Instantiating Process object
