@@ -20,7 +20,7 @@ public class ImgProcess {
 
 	public static final String IMAGE_MAGICK_PATH;
 	static {
-		if (Utils.isLinux()){
+		if (Utils.isWindows()){
 			IMAGE_MAGICK_PATH = "D:\\ImageMagick-7.1.0-Q16-HDRI";
 		} else {
 			IMAGE_MAGICK_PATH = "/usr/bin/";
@@ -69,13 +69,14 @@ public class ImgProcess {
 	      op.density(300);
 	      op.brightnessContrast(5d, 25d).sharpen(5d, 5d);
 	      op.bordercolor("black").border(1).fuzz (0.95).fill("white").draw("color 0,0 floodfill");
+	      op.transparent("white");
 	      op.addImage();
 	      // execute the operation
 	      ConvertCmd cmd = new ConvertCmd();
 	      BufferedImage img =  ImageIO.read(new File(deskew));
 	      String outfile = "./magickManipulation.jpg";
 	      ImageIO.write(img, "jpg", new File(outfile));
-          cmd.run(op,img,outfile);
+              cmd.run(op,img,outfile);
           
           return outfile;
          
@@ -85,7 +86,7 @@ public class ImgProcess {
 //                to a black and white image (monochrome image).	
 	
 
-   public  String bufferedImage (String imagePath1) throws Exception {
+   public String bufferedImage (String imagePath1) throws Exception {
 	   BufferedImage myPicture = ImageIO.read( new File(imagePath1));
 	       int width = myPicture.getWidth();
 	       int height = myPicture.getHeight();
@@ -121,4 +122,5 @@ public class ImgProcess {
 
 
        }
+       
 }
