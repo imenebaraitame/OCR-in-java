@@ -2,6 +2,12 @@ package ocr;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.ITesseract.RenderedFormat;
+import net.sourceforge.tess4j.TesseractException;
 
 public class TesseractCmd {
 	String input_file; String output_file; String tesseract_install_path ;String configfile;
@@ -11,6 +17,16 @@ public class TesseractCmd {
 		this.output_file = output_file;
 		this.tesseract_install_path = tesseract_install_path;
 		this.configfile = configfile;
+	}
+	
+	public void textOnlyPdf(String imagePath){
+		List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.PDF));
+		try {
+		Tesseract instance = new Tesseract();
+		instance.createDocuments(new String[]{imagePath}, new String[]{output_file}, formats);
+		} catch (TesseractException te){
+			System.err.println("Error TE: " + te.getMessage());
+		}
 	}
 		
 	public void searchableImg() throws IOException {
