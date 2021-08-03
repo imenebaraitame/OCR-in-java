@@ -48,43 +48,93 @@ public class ImgProcess {
 	    final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
 	  
 	    double imageSkewAngle = id.getSkewAngle(); // determine skew angle
-	    //System.out.println(imageSkewAngle);
 	    if ((imageSkewAngle > MINIMUM_DESKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_DESKEW_THRESHOLD))) {
 	        bi = ImageHelper.rotateImage(bi, -imageSkewAngle); // deskew image
 	    }
-	    String straightenImgPath = "./deskewImage.jpg";	   
-	    ImageIO.write(bi, "jpg", new File(straightenImgPath));
+	    String straightenImgPath = "./deskewImage.png";	   
+	    ImageIO.write(bi, "png", new File(straightenImgPath));
         
 	    return straightenImgPath;
 	}
   
-//Image magick manipulation: increase contrast and density, 
-//                           get rid of a black border around the image.
   
+ //get rid of a black border around image.
+  
+  public String removeBorder(String img) throws IOException, InterruptedException, IM4JavaException {
+	  ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
+	  IMOperation op = new IMOperation();
+	  op.addImage();
+	  op.density(300);
+	  op.bordercolor("black").border(1).fuzz (0.95).fill("white").draw("color 0,0 floodfill");
+	  op.addImage();
+	  ConvertCmd cmd = new ConvertCmd();
+      BufferedImage image =  ImageIO.read(new File(img));
+      String outFile = "./removeBorder.png";
+      ImageIO.write(image, "png", new File(outFile));
+      cmd.run(op,img,outFile);
+	  return outFile;
+  }
+  
+ /* 
+  * negate: Replace each pixel with its complementary color (White becomes black).
+  * Use .fill white .fuzz 11% p_opaque "#000000" to fill the text with white (so we can see most of the original image)
+  * Apply a light .blur (0d,1d) to the image.
+  */
 	public String magickManipulation(String deskew) throws IOException, InterruptedException, IM4JavaException {
-          ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
+        ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
 	      // create the operation, add images and operators/options
 	      IMOperation op = new IMOperation();
 	      op.addImage();
 	      op.density(300);
-	      op.brightnessContrast(5d, 25d).sharpen(5d, 5d);
-	      op.bordercolor("black").border(1).fuzz (0.95).fill("white").draw("color 0,0 floodfill");
-	      op.transparent("white");
+	      op.format("png").negate().fill("white").fuzz(0.11).p_opaque("#000000").blur(1d,1d);
 	      op.addImage();
+	    
 	      // execute the operation
 	      ConvertCmd cmd = new ConvertCmd();
 	      BufferedImage img =  ImageIO.read(new File(deskew));
-	      String outfile = "./magickManipulation.jpg";
-	      ImageIO.write(img, "jpg", new File(outfile));
-              cmd.run(op,img,outfile);
-          
-          return outfile;
-         
+	      String outfile = "./magickManipulation.png";
+	      ImageIO.write(img, "png", new File(outfile));
+        cmd.run(op,img,outfile);
+        
+        return outfile;
+       
 	}
+  
+  
+  
+ /*
+  * In this step every thing in black becoming transparent.
+  * we simply combine the original image with magickManipulation (the black and white version). 
+  */
+  
+      public String imageTransparent(String imgO, String imgNB) throws IOException, InterruptedException, IM4JavaException {
+    	  ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
+    	  IMOperation op = new IMOperation(); 
+	      op.addImage();
+	      op.density(300);
+	      op.addImage();
+	      op.density(300);
+	      op.compose("copy_opacity").composite();
+	      op.addImage();
+	      ConvertCmd cmd = new ConvertCmd();
+	      BufferedImage IMG2 =  ImageIO.read(new File(imgO));
+	      BufferedImage IMG =  ImageIO.read(new File(imgNB));
+	      String outputFile = "./transparentImg.png";
+	      ImageIO.write(IMG2,"png", new File(outputFile));
+	      ImageIO.write(IMG,"png", new File(outputFile));
+	      cmd.run(op,imgO,imgNB,outputFile);
+		  
+		return outputFile;
+    	  
+      }
+      
+    
 	    
-//Binaries Image: This step converts a multicolored image (RGB) 
-//                to a black and white image (monochrome image).	
-	
+/*
+ * Binaries Image: This step converts a multicolored image (RGB) 
+ *                 to a black and white image (monochrome image).
+ */
+         	
 
    public String bufferedImage (String imagePath1) throws Exception {
 	   BufferedImage myPicture = ImageIO.read( new File(imagePath1));
@@ -116,8 +166,8 @@ public class ImgProcess {
                            }
                          }
                  }
-             String imagePath2 ="./bufferedImage.jpg";
-             ImageIO.write(bufferedImage,"jpg", new File(imagePath2));
+             String imagePath2 ="./bufferedImage.png";
+             ImageIO.write(bufferedImage,"png", new File(imagePath2));
 			return imagePath2;
 
 
