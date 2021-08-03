@@ -8,16 +8,30 @@ public class Imgtext extends Tesseract {
 	
 	private String imagePath;
 
-	public Imgtext(String imagePath) throws Exception {
+	public Imgtext(String imagePath){
 		this.imagePath = imagePath;
 	}
-
-	String text() throws TesseractException {
+   
+	   
+	String text(){
+		
+		//mode 6: Assume a single uniform block of text.
 		this.setTessVariable("user_defined_dpi", "300");
 		this.setDatapath(System.getenv("TESSDATA_PREFIX"));
 		this.setLanguage("eng");//set the Eng language
-		String fulltext = this.doOCR(new File(imagePath));
+		
+		String fulltext = null;
+		try {
+			fulltext = this.doOCR(new File(imagePath));
+		} catch (TesseractException e) {
+			e.printStackTrace();
+			System.out.println("TESSERACT ERROR:" + e.getMessage());
+		}
 		return fulltext ;		
-	}
-
+	
+	
+    
+		
+	}		
+   
 }
