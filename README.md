@@ -1,14 +1,18 @@
-
 # OCR in Java
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+
 ## _General Info_
 Simple OCR project created with Java to read text from image.
 
-## _Installation_
+## _Installation_ & Environment variables
 To create a simple ocr software, download the tesseract library and install it from [github](https://github.com/UB-Mannheim/tesseract/wiki).
 You'll then need to install tesseract in a local directory, default path:
 ```
 .\Tesseract-OCR\tessdata
 ```
+You must define `TESSDATA_PREFIX` in your environment variables.
+
 and then install [image magick](https://imagemagick.org/) to make some adjustments to the image, and help tesseract to improve text recognition.
 The default path:
 ```

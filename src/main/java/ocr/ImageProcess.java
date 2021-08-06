@@ -16,7 +16,7 @@ import com.recognition.software.jdeskew.ImageDeskew;
 
 import net.sourceforge.tess4j.util.ImageHelper;
 
-public class ImgProcess {
+public class ImageProcess {
 
     public static final String IMAGE_MAGICK_PATH;
 	public static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
@@ -36,7 +36,7 @@ public class ImgProcess {
     // Linux
     //public static final String IMAGE_MAGICK_PATH = "/usr/bin/";
 
-    public ImgProcess(String imagePath) {
+    public ImageProcess(String imagePath) {
         this.imagePath = imagePath;
     }
 
