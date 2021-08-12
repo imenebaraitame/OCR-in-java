@@ -21,7 +21,7 @@ public class TextPdf {
 	          this.docPath = docPath;
 	        }
 
-	    void document() throws FileNotFoundException, DocumentException {
+	    void MakeDocument() throws FileNotFoundException, DocumentException {
 	    	Document document = new Document(PageSize.LETTER);
 	    	//2)Get a PdfWriter instance
 	    	FileOutputStream fos = new FileOutputStream(docPath);
