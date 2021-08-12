@@ -14,24 +14,24 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		//Image processing.
-		String imagePath = Main.class.getResource("/images/test2.jpg").getPath();
+		String imagePath = Main.class.getResource("/images/skew.png").getPath();
 		ImgProcess image = new ImgProcess(imagePath );
 		String imageDeskew = image.deskewImage(imagePath);
 		String imageNBorder = image.removeBorder(imageDeskew);
-		String blackNWhite = image.bufferedImage(imageNBorder);
-		String imageMagick = image.magickManipulation(blackNWhite);
-		String finalImage = image.imageTransparent(imageNBorder,imageMagick);
+		//String blackNWhite = image.bufferedImage(imageNBorder);
+		String binaryInv = image.binaryInverse(imageNBorder);
+		String finalImage = image.imageTransparent(imageNBorder,binaryInv);
 	    
 
         //Extract text from the image.
-		//Imgtext ocr = new Imgtext(finalImage);
-		//String fulltext = ocr.text();
-		
+		//Imgtext ocr = new Imgtext(imageNBorder);
+		//String fulltext = ocr.ExractText();
+        
 		
 		//System.out.println("Creating pdf document...");
 		//TextPdf textpdf = new TextPdf(fulltext, "./ocrDemo.pdf");
 		//System.out.println("Document created.");		
-		//textpdf.document();
+		//textpdf.MakeDocument();
 		
 		//Place an invisible text layer on the top of the image and create a searchable pdf.
 		// configfileValue = 0->make the image visible, =1->make the image invisible
