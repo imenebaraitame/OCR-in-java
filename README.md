@@ -72,9 +72,9 @@ The source code is written in 6 classes:
 #
 The code is relatively simple, we first open picture in which we are interested in. and we use some digital image processing:
  
- -Deskew: (rotation of the image) This means deskewing the image, to bring it in the right format and right shape.
- -remove black border around the image produce from deskewing the image (previous step).
- -Remove background from the image: make the image transparent in two steps, first we have to make background balck and text white (binarize inverse) and in second we combine this image with the originale to have transparent image .
+ + Deskew: (rotation of the image) This means deskewing the image, to bring it in the right format and right shape.
+ + remove black border around the image produce from deskewing the image (previous step).
+ + Remove background from the image: make the image transparent in two steps, first we have to make background balck and text white (binarize inverse) and in second we combine this image with the originale to have transparent image .
 #
  After that we jump to Imgtext.java class, we are creating a new instance of tesseract. we indicate where we have installed
  the library and then we do a text recognition using the doOCR() method.
