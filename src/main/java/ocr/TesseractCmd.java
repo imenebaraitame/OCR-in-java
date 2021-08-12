@@ -31,7 +31,7 @@ public class TesseractCmd {
 		instance.setPageSegMode(6);
 		instance.setTessVariable("user_defined_dpi", "300");
 		instance.setDatapath(System.getenv("TESSDATA_PREFIX"));
-		instance.setLanguage("eng");//set the Eng language
+		instance.setLanguage("ara+eng");//set the English and Arabic languages
 	    instance.setTessVariable("textonly_pdf",configfileValue);//0->make the image visible,1->make the image invisible
 	    instance.createDocuments(new String[]{imagePath}, new String[]{output_file}, formats);
 	    
