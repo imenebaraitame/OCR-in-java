@@ -13,16 +13,17 @@ public class Imgtext extends Tesseract {
 	}
    
 	   
-	String text(){
+	String ExractText(){
 		
 		//mode 6: Assume a single uniform block of text.
 		this.setTessVariable("user_defined_dpi", "300");
 		this.setDatapath(System.getenv("TESSDATA_PREFIX"));
-		this.setLanguage("eng");//set the Eng language
+		this.setLanguage("ara+eng");//set the English and Arabic language
 		
 		String fulltext = null;
 		try {
 			fulltext = this.doOCR(new File(imagePath));
+			System.out.println(fulltext);
 		} catch (TesseractException e) {
 			e.printStackTrace();
 			System.out.println("TESSERACT ERROR:" + e.getMessage());
