@@ -69,30 +69,31 @@ public class ImgProcess {
 	  op.addImage();
 	  ConvertCmd cmd = new ConvertCmd();
       BufferedImage image =  ImageIO.read(new File(img));
-      String outFile = "./removeBorder.png";
+      String outFile = "./borderRemoved.png";
       ImageIO.write(image, "png", new File(outFile));
       cmd.run(op,img,outFile);
 	  return outFile;
   }
   
- /* 
+ /* In this step we make the text white and background black.
+  * monochrome: converts a multicolored image (RGB), to a black and white image.
   * negate: Replace each pixel with its complementary color (White becomes black).
   * Use .fill white .fuzz 11% p_opaque "#000000" to fill the text with white (so we can see most of the original image)
   * Apply a light .blur (0d,1d) to the image.
   */
-	public String magickManipulation(String deskew) throws IOException, InterruptedException, IM4JavaException {
+	public String binaryInverse(String deskew) throws IOException, InterruptedException, IM4JavaException {
         ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
 	      // create the operation, add images and operators/options
 	      IMOperation op = new IMOperation();
 	      op.addImage();
 	      op.density(300);
-	      op.format("png").negate().fill("white").fuzz(0.11).p_opaque("#000000").blur(1d,1d);
+	      op.format("png").monochrome().negate().fill("white").fuzz(0.11).p_opaque("#000000").blur(1d,1d);
 	      op.addImage();
 	    
 	      // execute the operation
 	      ConvertCmd cmd = new ConvertCmd();
 	      BufferedImage img =  ImageIO.read(new File(deskew));
-	      String outfile = "./magickManipulation.png";
+	      String outfile = "./binaryInverseImg.png";
 	      ImageIO.write(img, "png", new File(outfile));
         cmd.run(op,img,outfile);
         
