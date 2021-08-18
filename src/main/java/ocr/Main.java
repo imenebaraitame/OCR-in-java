@@ -1,11 +1,7 @@
 package ocr;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 
 
 
@@ -13,65 +9,70 @@ import org.apache.pdfbox.pdmodel.PDPage;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		//Image processing.
-		String imagePath = Main.class.getResource("/images/skew.png").getPath();
-		ImgProcess image = new ImgProcess(imagePath );
-		String imageDeskew = image.deskewImage(imagePath);
-		String imageNBorder = image.removeBorder(imageDeskew);
-		//String blackNWhite = image.bufferedImage(imageNBorder);
-		String binaryInv = image.binaryInverse(imageNBorder);
-		String finalImage = image.imageTransparent(imageNBorder,binaryInv);
-	    
+		
+		String filePath = Main.class.getResource("/images/AraEng.pdf").getPath();
+		
+		if (FileExtension.isPdf(filePath)){
+			ExtractImage.imageFromPdf(filePath);
+			Path imgPath = Paths.get("ExtractedImage_1.png");
+			String img = imgPath.toAbsolutePath().toString();
+	        
+		
+		//Image processing.	
+		String imageNBorder = ImgProcess.ImgAfterDeskewingWithoutBorder(img);
+	    String finalImage = ImgProcess.ImgAfterRemovingBackground(img);
 
         //Extract text from the image.
-		//Imgtext ocr = new Imgtext(imageNBorder);
+		//Imgtext ocr = new Imgtext(finalImage);
 		//String fulltext = ocr.ExractText();
         
-		
 		//System.out.println("Creating pdf document...");
 		//TextPdf textpdf = new TextPdf(fulltext, "./ocrDemo.pdf");
 		//System.out.println("Document created.");		
 		//textpdf.MakeDocument();
 		
-		//Place an invisible text layer on the top of the image and create a searchable pdf.
 		// configfileValue = 0->make the image visible, =1->make the image invisible
-		TesseractCmd cmd = new TesseractCmd(finalImage,"./textonly_pdf","0");
-		cmd.textOnlyPdf(finalImage);
+		CreatePdf createPdf = new CreatePdf(finalImage,"./textonly_pdf","0");
+		createPdf.textOnlyPdf(finalImage);
 		
-		
- 
         System.out.println("getting the size and the location of the image from textonly_pdf");
-		PDDocument document = null;
+		
 		Path path = Paths.get("textOnly_pdf.pdf");
-		String inputFilePath= path.toAbsolutePath().toString();
-        
+		String ExistingPdfFilePath= path.toAbsolutePath().toString();
         String outputFilePath = "./newFile.pdf"; // New file
+        
+        GetImageLocationsAndSize.createPdfWithOriginalImage(ExistingPdfFilePath, outputFilePath, imageNBorder);
+        
+		}else {
+			//Image processing.	
+			String imageNBorder = ImgProcess.ImgAfterDeskewingWithoutBorder(filePath);
+		    String finalImage = ImgProcess.ImgAfterRemovingBackground(filePath);
+
+	        //Extract text from the image.
+			//Imgtext ocr = new Imgtext(finalImage);
+			//String fulltext = ocr.ExractText();
+	        
+			//System.out.println("Creating pdf document...");
+			//TextPdf textpdf = new TextPdf(fulltext, "./ocrDemo.pdf");
+			//System.out.println("Document created.");		
+			//textpdf.MakeDocument();
+			
+			// configfileValue = 0->make the image visible, =1->make the image invisible
+			CreatePdf createPdf = new CreatePdf(finalImage,"./textonly_pdf","0");
+			createPdf.textOnlyPdf(finalImage);
+			
+	        System.out.println("getting the size and the location of the image from textonly_pdf");
+			
+			Path path = Paths.get("textOnly_pdf.pdf");
+			String ExistingPdfFilePath= path.toAbsolutePath().toString();
+	        String outputFilePath = "./newFile.pdf"; // New file
+	        
+	        GetImageLocationsAndSize.createPdfWithOriginalImage(ExistingPdfFilePath, outputFilePath, imageNBorder);
+			
+		}
+		       
+	
 		
-         try {
-        	      
-        	document = PDDocument.load(new File(inputFilePath));
-            GetImageLocationsAndSize printer = new GetImageLocationsAndSize();
-            int pageNum = 0;
-            for( PDPage page : document.getPages() )
-            {
-                pageNum = pageNum + 1;
-                
-                printer.processPage(page);
-            }
-            document.close();
-            System.out.println("Document created.");
-            
-         //Place the original image on top of transparent image in existing PDF.
-            printer.merge(inputFilePath, outputFilePath, imageNBorder);
-         }
-         finally {
-        	 if(document != null)
-        	 {
-        		 document.close();
-        	 }
-         }
-		
-         
 		
 		
 		
@@ -83,6 +84,10 @@ public class Main {
 	
 	 
         
+	
+
+	
+		
 	}
 
 }
