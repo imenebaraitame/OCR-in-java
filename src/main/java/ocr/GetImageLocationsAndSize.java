@@ -1,6 +1,8 @@
 package ocr;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -30,9 +32,7 @@ import org.apache.pdfbox.contentstream.operator.state.SetMatrix;
 
 
 public class GetImageLocationsAndSize extends PDFStreamEngine{
-    /**
-     * @throws IOException If there is an error loading text stripper properties.
-     */
+    
     public GetImageLocationsAndSize() throws IOException
     {
         // preparing PDFStreamEngine
@@ -44,46 +44,46 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
         addOperator(new SetMatrix());
     }
     float imageYPosition; float imageXPosition; float imageXScale; float imageYScale;
-    //@Override
-   
     
+    //@Override
 	public void processOperator( Operator operator, List<COSBase> operands) throws IOException
     {  
 		String operation = operator.getName();
         if( "Do".equals(operation) )
-        {
-            COSName objectName = (COSName) operands.get( 0 );
-            // get the PDF object
-            PDXObject xobject = getResources().getXObject( objectName );
-            // check if the object is an image object
-            if( xobject instanceof PDImageXObject)
-            {
-  
-                Matrix ctmNew = getGraphicsState().getCurrentTransformationMatrix();
-             // displayed size in user space units
-                 imageXScale = ctmNew.getScalingFactorX();
-                 imageYScale = ctmNew.getScalingFactorY();
-              // position of image in the pdf in terms of user space units
-                 imageXPosition = ctmNew.getTranslateX();
-                 imageYPosition = ctmNew.getTranslateY();
-                
-            
+        {  
+           COSName objectName = (COSName) operands.get( 0 );
+	       PDXObject xobject = getResources().getXObject( objectName );
+	       
+            if(xobject  instanceof PDImageXObject) {
+            	getImageScaleAndPosition();
             }
             else if(xobject instanceof PDFormXObject)
             {
-                PDFormXObject form = (PDFormXObject)xobject;
+                PDFormXObject form = (PDFormXObject)xobject ;
                 showForm(form);
             }
         }
-        else
-        {
-            super.processOperator( operator, operands);
-        }      
-    }
+            else
+            {
+                super.processOperator( operator, operands);
+            } 
+        }
+    
 	
-	
-  //Place image on existing pdf.
-	public void merge(String inputFilePath,String outputFilePath,String imgPath ) throws DocumentException, IOException {
+	private void getImageScaleAndPosition() {
+		 Matrix ctmNew = getGraphicsState().getCurrentTransformationMatrix();
+         // displayed size in user space units
+             imageXScale = ctmNew.getScalingFactorX();
+             imageYScale = ctmNew.getScalingFactorY();
+          // position of image in the pdf in terms of user space units
+             imageXPosition = ctmNew.getTranslateX();
+             imageYPosition = ctmNew.getTranslateY();
+		
+	}
+    
+
+
+	public void PalceImageOnExistingPdf(String inputFilePath,String outputFilePath,String imgPath ) throws DocumentException, IOException {
 	    OutputStream file = new FileOutputStream(new File(outputFilePath));
 
 	    PdfReader pdfReader = new PdfReader(inputFilePath);
@@ -95,8 +95,7 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
 	    //Set position for image in PDF
 	    Img.setAbsolutePosition(imageXPosition,imageYPosition);
 	    
-	     
-	   
+	    
 	     // loop on all the PDF pages
 	     // i is the pdfPageNumber
 	     for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
@@ -111,6 +110,30 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
 	   
 		}
 	
-	
+	public static void createPdfWithOriginalImage(String ExistingPdfFilePath, String outputFilePath, String imageNBorder) 
+			           throws IOException, DocumentException {
+		   PDDocument document = null;
+	        try {
+	       	      
+	       	document = PDDocument.load(new File(ExistingPdfFilePath));
+	           GetImageLocationsAndSize printer = new GetImageLocationsAndSize();
+	          
+	           for( PDPage page : document.getPages() )
+	           { 
+	               printer.processPage(page);
+	           }
+	           document.close();
+	           System.out.println("Document created.");
+	           
+	        //Place the original image on top of transparent image in existing PDF.
+	           printer.PalceImageOnExistingPdf(ExistingPdfFilePath, outputFilePath, imageNBorder);
+	        }
+	        finally {
+	       	 if(document != null)
+	       	 {
+	       		 document.close();
+	       	 }
+	        }
+	}
 }
 
