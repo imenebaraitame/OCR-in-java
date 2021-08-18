@@ -11,12 +11,12 @@ import net.sourceforge.tess4j.TesseractException;
 
 
 
-public class TesseractCmd {
+public class CreatePdf {
 	String input_file; String output_file; String configfileValue;
 	
 
 	
-	public TesseractCmd(String input_file, String output_file,String configfileValue){
+	public CreatePdf(String input_file, String output_file,String configfileValue){
 		this.input_file = input_file;
 		this.output_file = output_file;
 		this.configfileValue = configfileValue;
@@ -32,7 +32,7 @@ public class TesseractCmd {
 		instance.setTessVariable("user_defined_dpi", "300");
 		instance.setDatapath(System.getenv("TESSDATA_PREFIX"));
 		instance.setLanguage("ara+eng");//set the English and Arabic languages
-	    instance.setTessVariable("textonly_pdf",configfileValue);//0->make the image visible,1->make the image invisible
+	    instance.setTessVariable("textonly_pdf",configfileValue);
 	    instance.createDocuments(new String[]{imagePath}, new String[]{output_file}, formats);
 	    
 		} catch (TesseractException te){
