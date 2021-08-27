@@ -15,7 +15,7 @@ public class Imgtext extends Tesseract {
 	   
 	String ExractText(){
 		
-		//mode 6: Assume a single uniform block of text.
+		
 		this.setTessVariable("user_defined_dpi", "300");
 		this.setDatapath(System.getenv("TESSDATA_PREFIX"));
 		this.setLanguage("ara+eng");//set the English and Arabic language
