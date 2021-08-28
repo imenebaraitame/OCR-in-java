@@ -116,7 +116,7 @@ public class ImgProcess {
 	      op.density(300);
 	      op.addImage();
 	      op.density(300);
-	      op.compose("copy_opacity").composite();
+	      op.alpha("off").compose("copy_opacity").composite();
 	      op.addImage();
 	      ConvertCmd cmd = new ConvertCmd();
 	      BufferedImage IMG2 =  ImageIO.read(new File(imgO));
