@@ -1,4 +1,5 @@
 package ocr;
+
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -31,9 +32,16 @@ import org.apache.pdfbox.contentstream.operator.state.SetGraphicsStateParameters
 import org.apache.pdfbox.contentstream.operator.state.SetMatrix;
 
 
-public class GetImageLocationsAndSize extends PDFStreamEngine{
-    
-    public GetImageLocationsAndSize() throws IOException
+public class ImageLocationsAndSize extends PDFStreamEngine{
+	
+	
+	 private float imageYPosition, imageXPosition, imageXScale, imageYScale;
+	 
+        /**
+	     * @throws IOException If there is an error loading text stripper properties.
+	     */ 
+	 
+    public ImageLocationsAndSize() throws IOException
     {
         // preparing PDFStreamEngine
         addOperator(new Concatenate());
@@ -43,7 +51,7 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
         addOperator(new Restore());
         addOperator(new SetMatrix());
     }
-    float imageYPosition; float imageXPosition; float imageXScale; float imageYScale;
+    
     
     //@Override
 	public void processOperator( Operator operator, List<COSBase> operands) throws IOException
@@ -52,10 +60,11 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
         if( "Do".equals(operation) )
         {  
            COSName objectName = (COSName) operands.get( 0 );
+           // get the PDF object
 	       PDXObject xobject = getResources().getXObject( objectName );
-	       
+	       // check if the object is an image object
             if(xobject  instanceof PDImageXObject) {
-            	getImageScaleAndPosition();
+            	findImageScaleAndPosition();
             }
             else if(xobject instanceof PDFormXObject)
             {
@@ -70,7 +79,7 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
         }
     
 	
-	private void getImageScaleAndPosition() {
+	private void findImageScaleAndPosition() {
 		 Matrix ctmNew = getGraphicsState().getCurrentTransformationMatrix();
          // displayed size in user space units
              imageXScale = ctmNew.getScalingFactorX();
@@ -80,9 +89,17 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
              imageYPosition = ctmNew.getTranslateY();
 		
 	}
-    
-
-
+	
+	
+	
+	/**
+     * Place image on existing pdf.
+     * @param inputFilePath
+     * @param outputFilePath
+     * @param imgPath
+     * @throws DocumentException
+     * @throws IOException
+     */ 
 	public void PalceImageOnExistingPdf(String inputFilePath,String outputFilePath,String imgPath ) throws DocumentException, IOException {
 	    OutputStream file = new FileOutputStream(new File(outputFilePath));
 
@@ -99,7 +116,7 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
 	     // loop on all the PDF pages
 	     // i is the pdfPageNumber
 	     for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
-	           //getOverContent() allows you to write pdfContentByte on TOP of existing pdf pdfContentByte.
+	    //getOverContent() allows you to write pdfContentByte on TOP of existing pdf pdfContentByte.
 	      
 	           PdfContentByte pdfContentByte = pdfStamper.getOverContent(i);
 	           pdfContentByte.addImage(Img);
@@ -116,7 +133,7 @@ public class GetImageLocationsAndSize extends PDFStreamEngine{
 	        try {
 	       	      
 	       	document = PDDocument.load(new File(ExistingPdfFilePath));
-	           GetImageLocationsAndSize printer = new GetImageLocationsAndSize();
+	           ImageLocationsAndSize printer = new ImageLocationsAndSize();
 	          
 	           for( PDPage page : document.getPages() )
 	           { 
