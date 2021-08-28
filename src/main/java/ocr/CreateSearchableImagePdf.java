@@ -11,12 +11,12 @@ import net.sourceforge.tess4j.TesseractException;
 
 
 
-public class CreatePdf {
+public class CreateSearchableImagePdf {
 	String input_file; String output_file; String configfileValue;
 	
 
 	
-	public CreatePdf(String input_file, String output_file,String configfileValue){
+	public CreateSearchableImagePdf(String input_file, String output_file,String configfileValue){
 		this.input_file = input_file;
 		this.output_file = output_file;
 		this.configfileValue = configfileValue;
