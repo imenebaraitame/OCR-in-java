@@ -18,8 +18,8 @@ The default path:
 ```
 .\ImageMagick-7.1.0-Q16-HDRI
 ```
-So lets beging by creating a new maven project and add in pom.xml three dependecies. The first for tesseract library, and the 
-seconde for creating a pdf document using iText and the last one is for image magick library.
+So lets beging by creating a new maven project and add in pom.xml four dependecies. The first for tesseract library, the 
+seconde for creating a pdf document using iText and third one for pdfbox, the last one is for image magick library.
 
 ```bash 
  <dependency>
@@ -34,7 +34,14 @@ seconde for creating a pdf document using iText and the last one is for image ma
     <artifactId>itextpdf</artifactId>
     <version>5.5.13.2 </version>
  </dependency>
-```
+``` 
+```bash 
+ <dependency>
+       <groupId>org.apache.pdfbox</groupId>
+       <artifactId>pdfbox</artifactId>
+       <version>2.0.24</version>
+    </dependency>
+```    
 ```bash 
  <dependency>
        <groupId>org.im4java</groupId>
@@ -57,8 +64,9 @@ The source code is written in 6 classes:
       - ImgProcess.java
       - Imgtext.java
       - TextPdf.java
-      - getTesseractCmd.java
-      - MyRunnable.java
+      - TesseractCmd.java
+      - GetImageLoactionAndSize.java
+      - Utils.java
     - resources
      |
      - images
@@ -67,9 +75,10 @@ The source code is written in 6 classes:
 
 #
 The code is relatively simple, we first open picture in which we are interested in. and we use some digital image processing:
- -Increase contrast and removing black border around the image that may have during scanning.
- -Deskew: (rotation of the image) This means deskewing the image, to bring it in the right format and right shape..
- -Binarize image: means to convert a colored image into a black and white.
+ 
+ + Deskew: (rotation of the image) This means deskewing the image, to bring it in the right format and right shape.
+ + remove black border around the image produce from deskewing the image (previous step).
+ + Remove background from the image: make the image transparent in two steps, first we have to make background balck and text white (binarize inverse) and in second we combine this image with the originale to have transparent image .
 #
  After that we jump to Imgtext.java class, we are creating a new instance of tesseract. we indicate where we have installed
  the library and then we do a text recognition using the doOCR() method.

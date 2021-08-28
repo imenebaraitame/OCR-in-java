@@ -1,6 +1,11 @@
 package ocr;
 
 import java.util.Locale;
+<<<<<<< HEAD
+=======
+
+public class Utils {
+>>>>>>> master
 
 public class Utils {
 

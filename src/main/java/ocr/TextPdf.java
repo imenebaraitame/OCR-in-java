@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class TextPdf {
 
+<<<<<<< HEAD
     private final String fullText;
     private final String docPath;
 
@@ -38,4 +39,22 @@ public class TextPdf {
         document.close();
     }
 
+=======
+	    void MakeDocument() throws FileNotFoundException, DocumentException {
+	    	Document document = new Document(PageSize.LETTER);
+	    	//2)Get a PdfWriter instance
+	    	FileOutputStream fos = new FileOutputStream(docPath);
+	    	System.out.println("File will be created at: " + new File(docPath).getPath());
+	    	PdfWriter.getInstance(document, fos);
+	    	//3)Open the Document
+	    	document.open();
+	    	//4)Add content
+	    	Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+	    	Paragraph paragraph = new Paragraph(fulltext, font);
+	    	document.add(paragraph);
+	    	//5)close the document
+	    	document.close();
+	    }
+		
+>>>>>>> master
 }
