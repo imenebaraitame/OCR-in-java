@@ -1,9 +1,13 @@
 package ocr;
 
 import java.util.Locale;
+<<<<<<< HEAD
+=======
 
 public class Utils {
+>>>>>>> master
 
+public class Utils {
 
 	public static String getOsName(){
 		//by using ROOT we don't specify the language/country.

@@ -1,0 +1,16 @@
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  - port: 8080 # for future usage
+    onOpen: open-preview
+
+tasks:
+  - before: >
+      source ~/.bashrc
+    init: >
+      convert --version
+      tesseract --version
+      sudo chmod +x run.sh
+    command: >
+      ./run.sh
