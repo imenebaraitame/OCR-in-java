@@ -15,9 +15,12 @@ import com.recognition.software.jdeskew.ImageDeskew;
 
 import net.sourceforge.tess4j.util.ImageHelper;
 
-public class ImgProcess {
+public class ImageProcess {
 
 	public static final String IMAGE_MAGICK_PATH;
+	public static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
+	private String imagePath;
+	
 	static {
 		if (Utils.isWindows()){
 			IMAGE_MAGICK_PATH = "D:\\ImageMagick-7.1.0-Q16-HDRI";
@@ -31,21 +34,22 @@ public class ImgProcess {
 	// Linux
 	//public static final String IMAGE_MAGICK_PATH = "/usr/bin/";
 
-	private String imagePath1;
 	
-	public ImgProcess(String imagePath1) {
-		this.imagePath1 = imagePath1;
+	
+	public ImageProcess(String imagePath) {
+		this.imagePath = imagePath;
 		
 	}
 	
-//Straightening a rotated image.
-	
-  public String deskewImage(String imagePath1) throws IOException {
-	    BufferedImage bi = ImageIO.read( new File(imagePath1));
+	/**
+	 * Straightening a rotated image.
+	 * @param inputImgPath
+	 * @return Output image file path
+	 * @throws IOException
+	 */
+  public String deskewImage(String inputImgPath) throws IOException {
+	    BufferedImage bi = ImageIO.read( new File(inputImgPath));
 	    ImageDeskew id = new ImageDeskew(bi);
-	   
-	    final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
-	  
 	    double imageSkewAngle = id.getSkewAngle(); // determine skew angle
 	    if ((imageSkewAngle > MINIMUM_DESKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_DESKEW_THRESHOLD))) {
 	        bi = ImageHelper.rotateImage(bi, -imageSkewAngle); // deskew image
@@ -57,9 +61,16 @@ public class ImgProcess {
 	}
   
   
- //get rid of a black border around image.
+  /**
+	 * Get rid of a black border around image.
+	 * @param inputImage
+	 * @return Output image file path
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws IM4JavaException
+	 */
   
-  public String removeBorder(String img) throws IOException, InterruptedException, IM4JavaException {
+  public String removeBorder(String inputImage) throws IOException, InterruptedException, IM4JavaException {
 	  ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
 	  IMOperation op = new IMOperation();
 	  op.addImage();
@@ -67,19 +78,25 @@ public class ImgProcess {
 	  op.bordercolor("black").border(1).fuzz (0.95).fill("white").draw("color 0,0 floodfill");
 	  op.addImage();
 	  ConvertCmd cmd = new ConvertCmd();
-      BufferedImage image =  ImageIO.read(new File(img));
+      BufferedImage image =  ImageIO.read(new File(inputImage));
       String outFile = "./borderRemoved.png";
       ImageIO.write(image, "png", new File(outFile));
-      cmd.run(op,img,outFile);
+      cmd.run(op,inputImage,outFile);
 	  return outFile;
   }
   
- /* In this step we make the text white and background black.
+ /**
+  * In this step we make the text white and background black.
   * monochrome: converts a multicolored image (RGB), to a black and white image.
   * negate: Replace each pixel with its complementary color (White becomes black).
   * Use .fill white .fuzz 11% p_opaque "#000000" to fill the text with white (so we can see most 
   * of the original image)
   * Apply a light .blur (1d,1d) to the image.
+  * @param deSkew
+  * @return Output image file path
+  * @throws IOException
+  * @throws InterruptedException
+  * @throws IM4JavaException
   */
 	public String binaryInverse(String deskew) throws IOException, InterruptedException, IM4JavaException {
         ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
@@ -100,15 +117,19 @@ public class ImgProcess {
         return outfile;
        
 	}
-  
-  
-  
- /*
+   
+ /**
   * In this step every thing in black becoming transparent.
   * we simply combine the original image with binaryInverseImg (the black and white version). 
+  * @param OriginalImgPath
+  * @param nbackgroundImgPath
+  * @return Output image file path
+  * @throws IOException
+  * @throws InterruptedException
+  * @throws IM4JavaException
   */
   
-      public String imageTransparent(String imgO, String imgNB) 
+      public String imageTransparent(String originalImgPath, String nbackgroundImgPath) 
     		  throws IOException, InterruptedException, IM4JavaException {
     	  ProcessStarter.setGlobalSearchPath(IMAGE_MAGICK_PATH);
     	  IMOperation op = new IMOperation(); 
@@ -119,12 +140,12 @@ public class ImgProcess {
 	      op.alpha("off").compose("copy_opacity").composite();
 	      op.addImage();
 	      ConvertCmd cmd = new ConvertCmd();
-	      BufferedImage IMG2 =  ImageIO.read(new File(imgO));
-	      BufferedImage IMG =  ImageIO.read(new File(imgNB));
+	      BufferedImage IMG1 =  ImageIO.read(new File(originalImgPath));
+	      BufferedImage IMG2 =  ImageIO.read(new File(nbackgroundImgPath));
 	      String outputFile = "./transparentImg.png";
+	      ImageIO.write(IMG1,"png", new File(outputFile));
 	      ImageIO.write(IMG2,"png", new File(outputFile));
-	      ImageIO.write(IMG,"png", new File(outputFile));
-	      cmd.run(op,imgO,imgNB,outputFile);
+	      cmd.run(op,originalImgPath,nbackgroundImgPath,outputFile);
 		  
 		return outputFile;
     	  
@@ -134,7 +155,7 @@ public class ImgProcess {
     public static String ImgAfterDeskewingWithoutBorder(String imagePath) 
      		     throws IOException, InterruptedException, IM4JavaException {
     	
-    	ImgProcess image = new ImgProcess(imagePath );
+    	ImageProcess image = new ImageProcess(imagePath );
 		String imageDeskew = image.deskewImage(imagePath);
 		String imageNBorder = image.removeBorder(imageDeskew);
 		
@@ -142,8 +163,8 @@ public class ImgProcess {
     }
     public static String ImgAfterRemovingBackground(String imagePath) throws IOException, InterruptedException, IM4JavaException {
     	
-    	ImgProcess image = new ImgProcess(imagePath );
-    	String imageNBorder = ImgProcess.ImgAfterDeskewingWithoutBorder(imagePath);
+    	ImageProcess image = new ImageProcess(imagePath );
+    	String imageNBorder = ImageProcess.ImgAfterDeskewingWithoutBorder(imagePath);
     	String binaryInv = image.binaryInverse(imageNBorder);
 		String finalImage = image.imageTransparent(imageNBorder,binaryInv);
 		
