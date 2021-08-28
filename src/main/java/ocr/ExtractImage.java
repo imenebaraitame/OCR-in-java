@@ -22,7 +22,10 @@ public class ExtractImage extends PDFStreamEngine {
    public ExtractImage() throws IOException {
 	   	
 	    }
+   
+   
    public int imageNumber = 1;
+   
    
    @Override 
    protected void processOperator( Operator operator, List<COSBase> operands) throws IOException
@@ -55,7 +58,9 @@ public class ExtractImage extends PDFStreamEngine {
        }
    }
    
-   public static void imageFromPdf (String fileName) throws IOException {
+   
+   
+   public static void takeImageFromPdf (String fileName) throws IOException {
 	   PDDocument document = null;
        try
        {
