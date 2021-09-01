@@ -11,6 +11,8 @@ RUN apt-get update -y && \
     apt-get install imagemagick -y
 
 RUN wget https://github.com/tesseract-ocr/tessdata/blob/master/eng.traineddata
+RUN wget https://github.com/tesseract-ocr/tessdata/blob/master/ara.traineddata
+RUN wget https://github.com/tesseract-ocr/tessdata/blob/master/fra.traineddata
 
 USER gitpod
 
