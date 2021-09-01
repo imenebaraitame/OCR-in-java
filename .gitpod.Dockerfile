@@ -7,7 +7,9 @@ USER root
 
 RUN apt-get update -y && \
     apt-get install libtesseract-dev -y && \
-    apt-get install tesseract-ocr -y && \
+    apt-get install tesseract-ocr-eng -y && \
+    apt-get install tesseract-ocr-ara -y && \
+    apt-get install tesseract-ocr-fra -y && \
     apt-get install imagemagick -y
 
 RUN wget https://github.com/tesseract-ocr/tessdata/blob/master/eng.traineddata
