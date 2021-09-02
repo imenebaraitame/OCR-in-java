@@ -2,3 +2,6 @@
 *.iml
 *.pdf
 target/
+.classpath
+.project
+.settings/
