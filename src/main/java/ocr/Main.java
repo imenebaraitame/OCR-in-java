@@ -64,7 +64,7 @@ public class Main {
 			
 	        System.out.println("getting the size and the location of the image from textonly_pdf");
 			
-			Path path = Paths.get("textOnly_pdf.pdf");
+			Path path = Paths.get("textonly_pdf.pdf");
 			String ExistingPdfFilePath= path.toAbsolutePath().toString();
 	        String outputFilePath = "./newFile.pdf"; // New file
 	        
