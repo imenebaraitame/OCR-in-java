@@ -15,7 +15,7 @@ import com.recognition.software.jdeskew.ImageDeskew;
 
 import net.sourceforge.tess4j.util.ImageHelper;
 
-public class ImageProcess {
+public class  ImageProcess {
 
 	public static final String IMAGE_MAGICK_PATH;
 	public static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
@@ -54,9 +54,9 @@ public class ImageProcess {
 	    if ((imageSkewAngle > MINIMUM_DESKEW_THRESHOLD || imageSkewAngle < -(MINIMUM_DESKEW_THRESHOLD))) {
 	        bi = ImageHelper.rotateImage(bi, -imageSkewAngle); // deskew image
 	    }
-	    String straightenImgPath = "./deskewImage.png";	   
+	    String straightenImgPath = "./deskewImage.png";
 	    ImageIO.write(bi, "png", new File(straightenImgPath));
-        
+
 	    return straightenImgPath;
 	}
   
@@ -92,7 +92,7 @@ public class ImageProcess {
   * Use .fill white .fuzz 11% p_opaque "#000000" to fill the text with white (so we can see most 
   * of the original image)
   * Apply a light .blur (1d,1d) to the image.
-  * @param deSkew
+  * @paramdeSkew
   * @return Output image file path
   * @throws IOException
   * @throws InterruptedException
@@ -121,7 +121,7 @@ public class ImageProcess {
  /**
   * In this step every thing in black becoming transparent.
   * we simply combine the original image with binaryInverseImg (the black and white version). 
-  * @param OriginalImgPath
+  * @paramOriginalImgPath
   * @param nbackgroundImgPath
   * @return Output image file path
   * @throws IOException
