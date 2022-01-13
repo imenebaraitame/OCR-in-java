@@ -1,15 +1,5 @@
 package ocr;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfReader;
-import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -23,32 +13,6 @@ public class Main {
 		if (FileExtension.isPdf(filePath)){
 			ExtractImage.takeImageFromPdf(filePath);
 			ExtractImage.MergePdfDocuments(filePath);
-
-			/*
-			//Loading an existing PDF document
-			//Create PDFMergerUtility class object
-			PDFMergerUtility PDFmerger = new PDFMergerUtility();
-
-			//Setting the destination file path
-			PDFmerger.setDestinationFileName("./merged.pdf");
-			for (int i = 1; i < 4; i++) {
-				File file1 = new File("./newFile_pdf_" + i + ".pdf");
-				PDDocument document1 = PDDocument.load(file1);
-
-				//adding the source files
-				PDFmerger.addSource(file1);
-
-				//Merging the documents
-				PDFmerger.mergeDocuments(null);
-
-				System.out.println("PDF Documents merged to a single file successfully");
-
-                //Close documents
-				document1.close();
-
-			}
-
-			 */
 
 
 			//Path imgPath = Paths.get("ExtractedImage_1.png");
@@ -72,7 +36,7 @@ public class Main {
 			//CreateSearchableImagePdf createPdf = new CreateSearchableImagePdf
 					//(finalImage,"./textonly_pdf","0");
 			//createPdf.textOnlyPdf(finalImage);
-////////
+
 			//System.out.println("getting the size and the location of the image from textonly_pdf");
 
 			//Path path = Paths.get("textonly_pdf.pdf");
@@ -85,8 +49,8 @@ public class Main {
         
 		}else {
 			//Image processing.	
-			String imageNBorder = ImageProcess.ImgAfterDeskewingWithoutBorder(filePath);
-		    String finalImage = ImageProcess.ImgAfterRemovingBackground(filePath);
+			String imageNBorder = ImageProcess.ImgAfterDeskewingWithoutBorder(filePath, 1);
+		    String finalImage = ImageProcess.ImgAfterRemovingBackground(filePath,1);
 
 	        //Extract text from the image.
 			//ImageText ocr = new ImageText(finalImage);
@@ -98,14 +62,14 @@ public class Main {
 			//textpdf.generateDocument();
 			
 			// configfileValue = 0->make the image visible, =1->make the image invisible
-			CreateSearchableImagePdf createPdf = new CreateSearchableImagePdf(finalImage,"./textonly_pdf","0");
-			createPdf.textOnlyPdf(finalImage);
+			CreateSearchableImagePdf createPdf = new CreateSearchableImagePdf(finalImage,"./textonly_pdf_","0");
+			createPdf.textOnlyPdf(finalImage, 1);
 			
 	        System.out.println("getting the size and the location of the image from textonly_pdf");
 			
-			Path path = Paths.get("textonly_pdf.pdf");
+			Path path = Paths.get("textonly_pdf_1.pdf");
 			String ExistingPdfFilePath= path.toAbsolutePath().toString();
-	        String outputFilePath = "./newFile.pdf"; // New file
+	        String outputFilePath = "./newFile_1.pdf"; // New file
 	        
 	        ImageLocationsAndSize.createPdfWithOriginalImage(ExistingPdfFilePath, 
 	        		                                         outputFilePath, imageNBorder);

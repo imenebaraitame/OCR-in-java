@@ -22,7 +22,7 @@ public class CreateSearchableImagePdf {
 		this.configfileValue = configfileValue;
 	}
 	 
-	public void textOnlyPdf(String imagePath){
+	public void textOnlyPdf(String imagePath , int number){
 	 List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.PDF));
           try {
 		
@@ -32,8 +32,8 @@ public class CreateSearchableImagePdf {
 		instance.setTessVariable("user_defined_dpi", "300");
 		instance.setDatapath(System.getenv("TESSDATA_PREFIX"));
 		instance.setLanguage("ara+eng");//set the English and Arabic languages
-	    instance.setTessVariable("textonly_pdf",configfileValue);
-	    instance.createDocuments(new String[]{imagePath}, new String[]{output_file}, formats);
+	    instance.setTessVariable("textonly_pdf_",configfileValue);
+	    instance.createDocuments(new String[]{imagePath}, new String[]{output_file + number}, formats);
 	    
 		} catch (TesseractException te){
 			System.err.println("Error TE: " + te.getMessage());
