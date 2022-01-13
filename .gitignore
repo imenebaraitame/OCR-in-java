@@ -1,6 +1,8 @@
 .idea/
 *.iml
 *.pdf
+*.png
+!img002.pdf
 target/
 .classpath
 .project
