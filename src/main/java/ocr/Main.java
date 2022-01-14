@@ -13,7 +13,7 @@ public class Main {
 
 		if (FileExtension.isPdf(filePath)){
 			ExtractImage.takeImageFromPdf(filePath);
-			ExtractImage.MergePdfDocuments(filePath,"./newfile_pdf_","./mergedImgPdf.pdf");
+			ExtractImage.MergePdfDocuments(filePath,"./newFile_pdf_","./mergedImgPdf.pdf");
 			ExtractImage.MergePdfDocuments(filePath,"./ocrDemo_pdf_","./mergedText.pdf");
 
         
