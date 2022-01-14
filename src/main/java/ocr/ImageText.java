@@ -17,7 +17,7 @@ public class ImageText extends Tesseract {
         
         this.setTessVariable("user_defined_dpi", "300");
         this.setDatapath(System.getenv("TESSDATA_PREFIX"));
-        this.setLanguage("eng");//set the English and Arabic language
+        this.setLanguage("ara+eng");//set the English and Arabic language
 
         String fullText= null;
         try {
