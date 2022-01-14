@@ -22,7 +22,7 @@ public class TextPdf {
         this.docPath = docPath;
     }
 
-    void generateDocument() throws FileNotFoundException, DocumentException {
+    void generateDocument(String fullText , int number) throws FileNotFoundException, DocumentException {
         Document document = new Document(PageSize.LETTER);
         //2) Get a PdfWriter instance
         FileOutputStream fos = new FileOutputStream(this.docPath);
@@ -32,8 +32,10 @@ public class TextPdf {
         document.open();
         //4) Add content
         Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Paragraph paragraph = new Paragraph(fullText, font);
-        document.add(paragraph);
+        Paragraph paragraph1 = new Paragraph("****** Result for Image/Page "+number+" ******");
+        Paragraph paragraph2 = new Paragraph(fullText, font);
+        document.add(paragraph1);
+        document.add(paragraph2);
         //5) Close the document
         document.close();
     }

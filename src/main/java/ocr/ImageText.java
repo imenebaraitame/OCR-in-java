@@ -13,13 +13,13 @@ public class ImageText extends Tesseract {
         this.imagePath = imagePath;
     }
 
-    String generateText() {
+    public String generateText() {
         
         this.setTessVariable("user_defined_dpi", "300");
         this.setDatapath(System.getenv("TESSDATA_PREFIX"));
-        this.setLanguage("ara+eng");//set the English and Arabic language
+        this.setLanguage("eng");//set the English and Arabic language
 
-        String fullText = null;
+        String fullText= null;
         try {
             fullText = this.doOCR(new File(imagePath));
         } catch (TesseractException e) {

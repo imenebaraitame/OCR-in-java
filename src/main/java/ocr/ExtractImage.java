@@ -1,5 +1,6 @@
 package ocr;
 
+
 import com.itextpdf.text.DocumentException;
 
 import org.apache.pdfbox.cos.COSBase;
@@ -17,6 +18,7 @@ import org.im4java.core.IM4JavaException;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import java.io.IOException;
 
 import java.util.List;
@@ -50,12 +52,23 @@ public class ExtractImage extends PDFStreamEngine {
                 try {
                     String imageNBorder = ImageProcess.ImgAfterDeskewingWithoutBorder(pathName, imageNumber);
                     String finalImage = ImageProcess.ImgAfterRemovingBackground(pathName, imageNumber);
+
                     // configfileValue = 0->make the image visible, =1->make the image invisible
                     CreateSearchableImagePdf createPdf = new CreateSearchableImagePdf
                             (finalImage, "./textonly_pdf_", "0");
                     createPdf.textOnlyPdf(finalImage, imageNumber);
+
                     ImageLocationsAndSize.createPdfWithOriginalImage("./textonly_pdf_" + imageNumber + ".pdf",
                             "./newFile_pdf_" + imageNumber + ".pdf", imageNBorder);
+
+                    //Extract text from the image.
+                    ImageText ocr = new ImageText(finalImage);
+                    String fulltext = ocr.generateText();
+
+                    System.out.println("Creating pdf document...");
+                    TextPdf textpdf = new TextPdf(fulltext, "./ocrDemo_pdf_" + imageNumber + ".pdf");
+                    System.out.println("Document "+ imageNumber +" created.");
+                    textpdf.generateDocument(fulltext,imageNumber);
 
                     imageNumber++;
 
@@ -95,23 +108,23 @@ public class ExtractImage extends PDFStreamEngine {
        }
    }
 
-    public static void MergePdfDocuments(String fileName) throws IOException {
+    public static void MergePdfDocuments(String fileName, String inputFile, String outputFile) throws IOException {
 
         //Loading an existing PDF document
         //Create PDFMergerUtility class object
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
         PDDocument document = null;
 
-        //use the input file fileName to get the number of pages
+        //use the input fileName to get the number of pages
         document = PDDocument.load(new File(fileName));
 
         //Setting the destination file path
-        PDFmerger.setDestinationFileName("./merged.pdf");
+        PDFmerger.setDestinationFileName(outputFile);
         int pageNum = 0;
         for (PDPage Page : document.getPages()) {
 
             pageNum++;
-            File file1 = new File("./newFile_pdf_" + pageNum + ".pdf");
+            File file1 = new File(inputFile + pageNum + ".pdf");
             PDDocument document1 = PDDocument.load(file1);
 
             //adding the source files
@@ -126,6 +139,8 @@ public class ExtractImage extends PDFStreamEngine {
             document1.close();
         }
     }
+
+
 
       
 	 
